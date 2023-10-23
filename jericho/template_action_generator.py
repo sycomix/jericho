@@ -93,9 +93,11 @@ class TemplateActionGenerator:
                 actions.extend([template.replace('OBJ', obj) for obj in objs])
             elif holes == 2:
                 for o1 in objs:
-                    for o2 in objs:
-                        if o1 != o2:
-                            actions.append(template.replace('OBJ', o1, 1).replace('OBJ', o2, 1))
+                    actions.extend(
+                        template.replace('OBJ', o1, 1).replace('OBJ', o2, 1)
+                        for o2 in objs
+                        if o1 != o2
+                    )
         return actions
 
 
@@ -134,16 +136,21 @@ class TemplateActionGenerator:
             if holes <= 0:
                 actions.append(defines.TemplateAction(template, template_idx, []))
             elif holes == 1:
-                for noun, noun_id in zip(objs, obj_ids):
-                    actions.append(
-                        defines.TemplateAction(template.replace('OBJ', noun),
-                                               template_idx, [noun_id]))
+                actions.extend(
+                    defines.TemplateAction(
+                        template.replace('OBJ', noun), template_idx, [noun_id]
+                    )
+                    for noun, noun_id in zip(objs, obj_ids)
+                )
             elif holes == 2:
                 for o1, o1_id in zip(objs, obj_ids):
-                    for o2, o2_id in zip(objs, obj_ids):
-                        if o1 != o2:
-                            actions.append(
-                                defines.TemplateAction(
-                                    template.replace('OBJ', o1, 1).replace('OBJ', o2, 1),
-                                    template_idx, [o1_id, o2_id]))
+                    actions.extend(
+                        defines.TemplateAction(
+                            template.replace('OBJ', o1, 1).replace('OBJ', o2, 1),
+                            template_idx,
+                            [o1_id, o2_id],
+                        )
+                        for o2, o2_id in zip(objs, obj_ids)
+                        if o1 != o2
+                    )
         return actions

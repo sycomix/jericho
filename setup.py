@@ -28,7 +28,7 @@ subprocess.check_call(['make', 'library', '-j', '4'], cwd=FROTZPATH)
 
 frotz_c_lib = 'jericho/libfrotz.so'
 if not os.path.isfile(frotz_c_lib):
-    print('ERROR: Unable to find required library %s.'%(frotz_c_lib))
+    print(f'ERROR: Unable to find required library {frotz_c_lib}.')
     sys.exit(1)
 
 exec(open('jericho/version.py').read())

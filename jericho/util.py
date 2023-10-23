@@ -44,7 +44,9 @@ def _load_spacy():
             import en_core_web_sm
             spacy_nlp = en_core_web_sm.load()
         except Exception as e:
-            print("Failed to load \'en\' with exception {}. Try: python -m spacy download en_core_web_sm".format(e))
+            print(
+                f"Failed to load \'en\' with exception {e}. Try: python -m spacy download en_core_web_sm"
+            )
             raise
 
 
@@ -101,8 +103,7 @@ def recognized(response):
     actions are detected by this method.
     """
     for p in defines.UNRECOGNIZED_REGEXPS:
-        match = p.match(response)
-        if match:
+        if match := p.match(response):
             return False
     return True
 
@@ -126,7 +127,7 @@ def extract_objs(text):
     for token in doc:
         if token.pos_ == 'ADJ':
             s.add((token.text.lower(), 'ADJ'))
-        elif token.pos_ == 'NOUN' or token.pos_ == 'PROPN':
+        elif token.pos_ in ['NOUN', 'PROPN']:
             s.add((token.text.lower(), 'NOUN'))
     return s
 
@@ -198,15 +199,8 @@ def verb_usage_count(verb, max_word_length=None):
 
     # Do a prefix check on any possibly prefixed verbs
     if max_word_length is not None and len(verb) == max_word_length:
-        tot = 0
-        for k,v in clubfloyd_verb_counts.items():
-            if k.startswith(verb):
-                tot += v
-        return tot
-
-    if verb in clubfloyd_verb_counts:
-        return clubfloyd_verb_counts[verb]
-    return 0
+        return sum(v for k, v in clubfloyd_verb_counts.items() if k.startswith(verb))
+    return clubfloyd_verb_counts[verb] if verb in clubfloyd_verb_counts else 0
 
 
 def chunk(items: List, n: int) -> List[List]:
@@ -225,4 +219,4 @@ def chunk(items: List, n: int) -> List[List]:
         https://stackoverflow.com/a/2135920
     """
     k, m = divmod(len(items), n)
-    return list(items[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
+    return [items[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n)]

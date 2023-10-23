@@ -31,7 +31,7 @@ def bench_loading_speed():
 
     duration2 = time.time() - start
     print("Calling env.load({}) {} times in {:6.2f} secs.".format(rom, REPEAT, duration2))
-    print("Speedup: {}x.".format(duration1 / duration2))
+    print(f"Speedup: {duration1 / duration2}x.")
 
 
 if __name__ == "__main__":

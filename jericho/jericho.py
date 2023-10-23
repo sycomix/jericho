@@ -93,9 +93,7 @@ class ZObject(Structure):
         self.num = -1
 
     def __str__(self):
-        return "Obj{}: {} Parent{} Sibling{} Child{} Attributes {} Properties {}"\
-            .format(self.num, self.name, self.parent, self.sibling, self.child,
-                    np.nonzero(self.attr)[0].tolist(), [p for p in self.properties if p != 0])
+        return f"Obj{self.num}: {self.name} Parent{self.parent} Sibling{self.sibling} Child{self.child} Attributes {np.nonzero(self.attr)[0].tolist()} Properties {[p for p in self.properties if p != 0]}"
 
     def __repr__(self):
         return str(self)
