@@ -73,8 +73,8 @@ def test_for_memory_leaks():
           mem_end / unit, (mem_end-mem_mid) / unit))
 
     # Less than 1MB memory leak per 1000 load/unload cycles.
-    assert (mem_mid - mem_start) < unit * unit
-    assert (mem_end - mem_mid) < unit * unit
+    assert mem_mid - mem_start < unit**2
+    assert mem_end - mem_mid < unit**2
 
 
 def test_copy():
@@ -113,7 +113,7 @@ def test_saving_opcode_in_state():
 
     rom = pjoin(DATA_PATH, "roms", "yomomma.z8")
     if not os.path.exists(rom):
-        raise unittest.SkipTest("Missing data: {}".format(rom))
+        raise unittest.SkipTest(f"Missing data: {rom}")
 
     env = jericho.FrotzEnv(rom)
     env.reset()

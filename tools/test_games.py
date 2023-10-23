@@ -43,7 +43,7 @@ for filename in sorted(args.filenames):
         if args.debug:
             from ipdb import set_trace; set_trace()
     elif info["score"] != env.get_max_score():
-        msg = "FAIL\tDone but score {}/{}".format(info["score"], env.get_max_score())
+        msg = f'FAIL\tDone but score {info["score"]}/{env.get_max_score()}'
         print(colored(msg, 'red'))
         if args.verbose:
             print(textwrap.indent(obs, prefix="  "))

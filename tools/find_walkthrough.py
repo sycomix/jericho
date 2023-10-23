@@ -21,20 +21,17 @@ def parse_args():
 
 args = parse_args()
 
-history = []
 env = jericho.FrotzEnv(args.filename)
 obs, info = env.reset()
 
-history.append(env.get_state())
-
+history = [env.get_state()]
 STEP_BY_STEP_WALKTRHOUGH = True
 
 walkthrough = env.get_walkthrough()
 if args.walkthrough:
     walkthrough = []
     for line in open(args.walkthrough):
-        cmd = line.split("#")[0].strip()
-        if cmd:
+        if cmd := line.split("#")[0].strip():
             walkthrough.append(cmd)
 
 obs_list = [obs]
@@ -45,14 +42,13 @@ while True:
         cmd = walkthrough[cpt]
         print(obs)
         if cpt >= args.skip_to:
-            alt = input("{}. [{}] > ".format(cpt, cmd))
-            if alt:
+            if alt := input(f"{cpt}. [{cmd}] > "):
                 cmd = alt
         else:
-            print("{}. [{}]".format(cpt, cmd))
+            print(f"{cpt}. [{cmd}]")
     else:
         print(obs)
-        cmd = input("{}. > ".format(cpt))
+        cmd = input(f"{cpt}. > ")
 
     if cmd == "undo":
         history = history[:-1]
